@@ -187,6 +187,7 @@ import time
 import pandas as pd
 </code></pre>
 <br>
+Step1 抓取菜單中麵類品項								
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic04.jpg" alt="" /></span>
 #抓取菜單中麵類品項
@@ -202,7 +203,8 @@ def get_menu():
     try:
         driver.get("https://www.mkkramen.com/food")
 </code></pre>
-<br>		
+<br>
+Step2
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic05.jpg" alt="" /></span>
 	# 等待 li.menu-item 出現
@@ -218,6 +220,7 @@ def get_menu():
         menu = [] 
 </code></pre>
 <br>
+Step3
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic06.jpg" alt="" /></span>
 for card in cards:
@@ -244,6 +247,7 @@ for card in cards:
         driver.quit()
 </code></pre>
 <br>
+Step4
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 if __name__ == "__main__":
@@ -256,7 +260,7 @@ if __name__ == "__main__":
         print("查無資料")
 </code></pre>
 <br>
-								
+Step5								
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 # 轉為 DataFrame 並輸出成 CSV
