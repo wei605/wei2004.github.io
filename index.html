@@ -32,8 +32,8 @@
 							<ul>
 								<li><a style="color:#f5d082;" href="#intro">履歷</a></li>
 								<li><a style="color:#f2ee96;" href="#work">個人介紹</a></li>
-								<li><a style="color:#adf0af;" href="#about">爬蟲成果</a></li>
 								<li><a style="color:#b4dbed;" href="#contact">程式碼</a></li>
+								<li><a style="color:#adf0af;" href="#about">爬蟲成果</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
 						</nav>
@@ -167,16 +167,7 @@
 								
 							</article>
 
-						<!-- Achievements -->
-							<article id="about">
-								<h2 style="color:#adf0af;" class="major">爬蟲成果</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-								<p>這次的專案成果是利用 Python 結合 Selenium 技術，成功爬取 麵框框官方網站上的菜單資訊。透過模擬使用者操作，我的程式能夠進入網站並等待網頁的內容完整載入後，擷取出所有的菜單項目。為了聚焦於主要品項，我進一步篩選所有菜單中包含「麵」這個字的品項，也就是只擷取拉麵類的餐點，並搭配價格資料一併整理呈現。</p>
-								<br>
-								
-								
-							</article>
-
+						
 						<!-- Contact -->
 							<article id="contact">
 								<h2 style="color:#b4dbed;" class="major">程式碼</h2>
@@ -200,75 +191,87 @@ import pandas as pd
 <span class="image main"><img src="images/pic04.jpg" alt="" /></span>
 #抓取菜單中麵類品項
 def get_menu():
-options = webdriver.ChromeOptions()
-options.add_argument("--disable-blink-features=AutomationControlled")
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
-driver = webdriver.Chrome(
-service=webdriver.chrome.service.Service(ChromeDriverManager().install()),
-options=options)
+    driver = webdriver.Chrome(
+        service=webdriver.chrome.service.Service(ChromeDriverManager().install()),
+        options=options
+    )
 
-try:
-driver.get("https://www.mkkramen.com/food")
+    try:
+        driver.get("https://www.mkkramen.com/food")
 </code></pre>
 <br>		
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic05.jpg" alt="" /></span>
-# 等待 li.menu-item 出現
-WebDriverWait(driver, 15).until(
-EC.presence_of_element_located((By.CSS_SELECTOR, "li.menu-item"))
-)
-
-# 緩衝時間確保數據完全渲染
-time.sleep(2) 
+	# 等待 li.menu-item 出現
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "li.menu-item"))
+        )
+	# 緩衝時間確保數據完全渲染
+        time.sleep(2) 
         
-# 抓取所有菜單項目每個 li.menu-item
-cards = driver.find_elements(By.CSS_SELECTOR, "li.menu-item")
-
-# 存放菜單資訊
-menu = []
+	# 抓取所有菜單項目每個 li.menu-item
+        cards = driver.find_elements(By.CSS_SELECTOR, "li.menu-item")
+	# 存放菜單資訊
+        menu = [] 
 </code></pre>
 <br>
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic06.jpg" alt="" /></span>
 for card in cards:
-try:
-# 抓價格
-price = card.find_element(By.CSS_SELECTOR, ".price").text.strip()
+            try:
+		# 抓價格
+                price = card.find_element(By.CSS_SELECTOR, ".price").text.strip()
                 
-# 用 textContent 抓全部文字，然後去掉價格得到名稱
-full_text = card.get_attribute("textContent").strip()
-title = full_text.replace(price, "").strip()
+                # 用 textContent 抓全部文字，然後去掉價格得到名稱
+                full_text = card.get_attribute("textContent").strip()
+                title = full_text.replace(price, "").strip()
                 
-# 只保留名稱中包含「麵」的項目
-if "麵" in title:
-menu.append({"品項": title, "價格": price})
-except Exception as e:
-print(f"跳過一項錯誤: {e}") 
-return menu
+                # 只保留名稱中包含「麵」的項目
+                if "麵" in title:
+                   menu.append({"品項": title, "價格": price})
+            except Exception as e:
+                print(f"跳過一項錯誤: {e}") 
+        return menu
 
-except Exception as e:
-print(f"發生錯誤: {e}")
-driver.save_screenshot("error_menu.png")
-return None
-finally:
-driver.quit()
+    except Exception as e:
+        print(f"發生錯誤: {e}")
+        driver.save_screenshot("error_menu.png")
+        return None
+    finally:
+        driver.quit()
 </code></pre>
 <br>
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 if __name__ == "__main__":
-result = get_menu()
-if result:
-print(f"成功獲取 {len(result)} 品項：\n")
-for item in result:
-print(f"{item['品項']} - ${item['價格']}")
-else:
-print("查無資料")
-
+    result = get_menu()
+    if result:
+        print(f"成功獲取 {len(result)} 品項：\n")
+        for item in result:
+            print(f"{item['品項']} - ${item['價格']}")
+    else:
+        print("查無資料")
+</code></pre>
+<br>
+								
+<pre style="color:#b4dbed;" ><code>
+<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 # 轉為 DataFrame 並輸出成 CSV
 df = pd.DataFrame(result)
 df.to_csv(r"C:/Users/user/OneDrive/桌面/成功獲取.csv", index=False, encoding="utf-8-sig")
 </code></pre>
+							</article>
+<!-- Achievements -->
+							<article id="about">
+								<h2 style="color:#adf0af;" class="major">爬蟲成果</h2>
+								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
+								<p>這次的專案成果是利用 Python 結合 Selenium 技術，成功爬取 麵框框官方網站上的菜單資訊。透過模擬使用者操作，我的程式能夠進入網站並等待網頁的內容完整載入後，擷取出所有的菜單項目。為了聚焦於主要品項，我進一步篩選所有菜單中包含「麵」這個字的品項，也就是只擷取拉麵類的餐點，並搭配價格資料一併整理呈現。</p>
+								<br>
+								
+								
 							</article>
 
 						<!-- Elements -->
