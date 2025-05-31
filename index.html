@@ -205,7 +205,7 @@ def get_menu():
         driver.get("https://www.mkkramen.com/food")
 </code></pre>
 <br>
-Step2
+Step2 抓取菜單中的li.menu-item
 <br>
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic05.jpg" alt="" /></span>
@@ -222,7 +222,7 @@ Step2
         menu = [] 
 </code></pre>
 <br>
-Step3
+Step3 先抓整段 textContent，是因為品項名稱和價格混在一起，不是分開的欄位。透過抓全部文字再扣掉價格，才能正確取得品項名稱。
 <br>
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic06.jpg" alt="" /></span>
@@ -250,10 +250,10 @@ for card in cards:
         driver.quit()
 </code></pre>
 <br>
-Step4
+Step4 輸出只有麵類的品項及價格
 <br>
 <pre style="color:#b4dbed;" ><code>
-<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
+<span class="image main"><img src="images/pic07.jpg" alt="" /></span>
 if __name__ == "__main__":
     result = get_menu()
     if result:
@@ -264,7 +264,7 @@ if __name__ == "__main__":
         print("查無資料")
 </code></pre>
 <br>
-Step5
+Step5 轉為 DataFrame 並輸出成 CSV
 <br>
 <pre style="color:#b4dbed;" ><code>
 <span class="image main"><img src="images/pic03.jpg" alt="" /></span>
